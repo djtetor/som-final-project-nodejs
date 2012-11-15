@@ -1,0 +1,48 @@
+<html>
+	<head>
+		<script src="/socket.io/socket.io.js"></script>
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+		<script>
+			/*
+			* Area del websocket!!!
+			**/
+			var socket;
+			socket= io.connect('http://Xector:1234');
+			socket.on('connect',function(){ 
+				console.log("conectado");
+				$('#mensajes').append('<p>Conectado</p>');
+			});
+			socket.on('disconnect',function(){ 
+				console.log("desconectado");
+				$('#mensajes').append('<p>Conectado</p>');
+			});
+			socket.on('mensaje',function(data){
+				$('#mensajes').append('<p>'+data.mensaje+'</p>');
+			});
+			socket.on('message',function(data){
+				$('#mensajes').append('<p>Broadcast: '+data+'</p>');
+			})
+
+			$(document).ready(function(){
+				$('#btnEnviar').click(function(){
+					EnviarMensaje($('#txtTexto').val());
+				})
+			});
+			function EnviarMensaje(mensaje){
+				socket.emit('mensaje',{mensaje: mensaje});
+			}
+			
+		</script>
+	</head>
+	<body>
+		<h2>Chat con Web Socket</h2>
+		<input type="text" id="txtTexto"/>
+		<input type="button" id="btnEnviar">
+		<div id="mensajes"></div>
+	</body>
+</html>
+
+
+
+
+
